@@ -9,6 +9,13 @@ import datetime
 import codecs
 
 
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+
+
+todayDate = str(datetime.datetime.now()).split(' ')[0]
+
 ##Referrer check + add
 def get_source(url,referer):
 	req = urllib2.Request(url)
@@ -29,7 +36,7 @@ def haksik(month,day):
 	print yoeil[day_num]
 	#yoeil = str(yoeil[day_num])
 
-	with codecs.open(str(month)+str(day)+"_학식"+".txt", "w", encoding="utf-8") as f:
+	with codecs.open(str(todayDate)+"_학식"+".txt", "w", encoding="utf-8") as f:
 		f.write(str(d.year)+'_'+month+'_'+day+' ('+yoeil[day_num]+")\r\n")
 		f.write("==========================================\r\n\r\n")
 
@@ -88,7 +95,7 @@ def haksik(month,day):
 		temp_1 = cleanhtml(a)
 	#	print "[+]",temp_1
 	#  건물 별로 따로 파일 생성/저장 작업 >> temp_1 은 건물 명
-		with codecs.open(str(month)+str(day)+"_"+str(cnt)+".txt", "w", encoding="utf-8") as j:
+		with codecs.open(str(todayDate)+"_"+str(cnt)+".txt", "w", encoding="utf-8") as j:
 			j.write(temp_1+"\r\n")
 		temp += temp_1
 		temp += "\r\n"
@@ -101,7 +108,7 @@ def haksik(month,day):
 			temp_2 = cleanhtml(i)
 			print "[+]",temp_2
 			#  건물 별로 따로 파일 생성/저장 작업 >> temp_2 는 식단표
-			with codecs.open(str(month)+str(day)+"_"+str(cnt)+".txt", "a+", encoding="utf-8") as j:
+			with codecs.open(str(todayDate)+"_"+str(cnt)+".txt", "a+", encoding="utf-8") as j:
 				j.write(temp_2+"\r\n")
 			temp += temp_2
 			temp += "\r\n"
@@ -113,7 +120,7 @@ def haksik(month,day):
 
 	#codec 이용해서 파일을 쓸수 있다. 개행은 \r\n
 	#전체 건물 별 식단 저장.
-	with codecs.open(str(month)+str(day)+"_학식"+".txt", "a+", encoding="utf-8") as f:
+	with codecs.open(str(todayDate)+"_학식"+".txt", "a+", encoding="utf-8") as f:
 		f.write(temp+"\r\n")
 
 	#	print cleanhtml(b)
@@ -121,351 +128,76 @@ def haksik(month,day):
 	print temp
 	print
 
-
+#기숙사 통합 식단.
 def hyumin1(month,day):
-	with codecs.open(str(month)+str(day)+"_학식"+".txt", "a+", encoding="utf-8") as f:
-		f.write(u"제 1 효민 생활관\r\n")
+	with codecs.open(str(todayDate)+"_학식"+".txt", "a+", encoding="utf-8") as f:
+		f.write(u"기숙사 통합\r\n")
 		f.write("==========================================\r\n")
 
-	with codecs.open(str(month)+str(day)+"_효민1"+".txt", "w", encoding="utf-8") as f:
-		f.write(u"제 1 효민 생활관\r\n")
-#		f.write("==========================================\r\n")
 	print "\n+++++++++++++++++제 1 효민 생활관++++++++++++++++++++"
 
 
-	###############제1 효민 생활관 파싱
-	url2 = 'http://dorm.deu.ac.kr/Program/ReadFood.aspx?BuildCd=1&menu=46'
-	html2 = get_source(url2,url2)
-	soup2 = BeautifulSoup(html2)
-	result2 = str(soup2)
-
-	#a = soup2.find_all('td',{'width':'140'})
-	a = soup2.find_all('tr')
-	#a = soup2.find_all('table',{'border':'1'})
-	#a = soup2.find_all('font',{'face':'Arial'})
-
-	cnt = 0
-	eatTime = 0
-	result_text = ""
-	tex = ""
-	d = datetime.date.today()
-	d= d.weekday()
-	d += 2
-	k=0
-	#한글 파싱 // \xa0 인식불가 제거
-	# b= 기숙사 식단 파싱
-
-	for i in a:
-		cnt += 1
-		i = i.find_all('td')
-		for b in i:
-			b = b.text
-			b = b.replace(u'\xa0', '')
-			b = b.replace('            ','')
-			b = b.replace('\r','')
-
-			if cnt ==1:
-				#print k, b[0:3]
-				#조식 중식 석식 문자열 체크
-				if k ==1 : mor = b[0:3]
-				if k ==2 : aft = b[0:3]
-				if k ==3 : eve = b[0:3]
-				k+=1
-
-			if eatTime%4 == 0:
-				b = b.replace('\n','')
-				result_text += b
-				result_text += '\n'
-				pass
 
 
-			elif eatTime%4 == 1:
-				b = b.replace('\n','  ')
-				b = b.replace('  ',' ')
-				if cnt == d:
-					print '===아침==='
-					with codecs.open(str(month)+str(day)+"_학식"+".txt", "a+", encoding="utf-8") as f:
-						f.write(mor+"\r\n")
-					with codecs.open(str(month)+str(day)+"_효민1"+".txt", "a+", encoding="utf-8") as j:
-						j.write(mor+"\r\n")
-				result_text += b
-				result_text += '\n'
+	#url 변경 : https://dorm.deu.ac.kr/hyomin/food/getWMLastNext.kmc?sch_date=2018-06-03
+	url2 = 'https://dorm.deu.ac.kr/hyomin/food/getWMLastNext.kmc?sch_date=2018-06-03'
 
-			elif eatTime%4 == 2:
-				if cnt == d:
-					print '===점심==='
-					with codecs.open(str(month)+str(day)+"_학식"+".txt", "a+", encoding="utf-8") as f:
-						f.write(aft+"\r\n")
-					with codecs.open(str(month)+str(day)+"_효민1"+".txt", "a+", encoding="utf-8") as j:
-						j.write(aft+"\r\n")
-				b = b.replace('\n',' ')
-				result_text += b
-				result_text += '\n'
+	#header setting
+	options = webdriver.ChromeOptions()
+	options.add_argument('headless')
+	options.add_argument('window-size=1920x1080')
+	options.add_argument("disable-gpu")
+	options.add_argument("user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36")
+	options.add_argument("lang=ko_KR")
 
-			elif eatTime%4 == 3:
-				if cnt == d:
-					print '===저녁==='
-					with codecs.open(str(month)+str(day)+"_학식"+".txt", "a+", encoding="utf-8") as f:
-						f.write(eve+"\r\n")
-					with codecs.open(str(month)+str(day)+"_효민1"+".txt", "a+", encoding="utf-8") as j:
-						j.write(eve+"\r\n")
-				b = b.replace('\n',' ')
-				result_text += b
-				result_text += '\n\n\n'
+	#chrome driver load
+	driver = webdriver.Chrome('./chromedriver', chrome_options=options)
+	driver.get('about:blank')
+	driver.execute_script("Object.defineProperty(navigator, 'plugins', {get: function() {return[1, 2, 3, 4, 5];},});")
 
 
-			if cnt == d:
-				print b
-				with codecs.open(str(month)+str(day)+"_학식"+".txt", "a+", encoding="utf-8") as f:
-					f.write(b+"\r\n\r\n")
-				with codecs.open(str(month)+str(day)+"_효민1"+".txt", "a+", encoding="utf-8") as j:
-					j.write(b+"\r\n")
-				print
 
-			eatTime+=1
-	with codecs.open(str(month)+str(day)+"_학식"+".txt", "a+", encoding="utf-8") as f:
+	day = str(time.localtime().tm_wday+1)
+
+	driver.get('https://dorm.deu.ac.kr/hyomin/food/getWMLastNext.kmc?sch_date='+todayDate)
+	#today Click -> javascript onclick
+	driver.find_element_by_xpath("//a[@id='tabDay"+day+"']").send_keys(Keys.ENTER)
+
+
+	#morning
+	mor = driver.find_element_by_xpath("//td[@id='fo_menu_mor1']").text
+
+	#lunch
+	lun = driver.find_element_by_xpath("//td[@id='fo_menu_lun1']").text
+
+	#evening
+	eve = driver.find_element_by_xpath("//td[@id='fo_menu_eve1']").text
+	print "조식 : ",mor
+	print "중식 : ",lun
+	print "석식 : ",eve
+
+	driver.quit()
+	with codecs.open(str(todayDate)+"_학식"+".txt", "a+", encoding="utf-8") as f:
+		f.write(mor+"\r\n")
+		f.write(lun+"\r\n")
+		f.write(eve+"\r\n")
 		f.write("\r\n\r\n")
 	#print mor, aft, eve
-	print "\n\n\n"
-
-
-def hyumin2(month,day):
-	with codecs.open(str(month)+str(day)+"_학식"+".txt", "a+", encoding="utf-8") as f:
-		f.write(u"제 2 효민 생활관\r\n")
-		f.write("===========================================\r\n")
-
-	with codecs.open(str(month)+str(day)+"_효민2"+".txt", "w", encoding="utf-8") as j:
-		j.write(u"제 2 효민 생활관\r\n")
-
-	print "\n+++++++++++++++++제 2 효민 생활관++++++++++++++++++++"
-	###############제2 효민 생활관 파싱
-	url2 = 'http://dorm.deu.ac.kr/Program/ReadFood.aspx?BuildCd=3&menu=46'
-	html2 = get_source(url2,url2)
-	soup2 = BeautifulSoup(html2)
-	result2 = str(soup2)
-
-	#a = soup2.find_all('td',{'width':'140'})
-	a = soup2.find_all('tr')
-	#a = soup2.find_all('table',{'border':'1'})
-	#a = soup2.find_all('font',{'face':'Arial'})
-
-
-	cnt = 0
-	eatTime = 0
-	result_text = ""
-	tex = ""
-	d = datetime.date.today()
-	d= d.weekday()
-	d += 2
-	k=0
-	#한글 파싱 // \xa0 인식불가 제거
-	# b= 기숙사 식단 파싱
-
-	for i in a:
-		cnt += 1
-		i = i.find_all('td')
-		for b in i:
-			b = b.text
-			b = b.replace(u'\xa0', '')
-			b = b.replace('            ','')
-			b = b.replace('\r','')
-
-			if cnt ==1:
-				#print k, b[0:3]
-				#조식 중식 석식 문자열 체크
-				if k ==1 : mor = b[0:3]
-				if k ==2 : aft = b[0:3]
-				if k ==3 : eve = b[0:3]
-				k+=1
-
-			if eatTime%4 == 0:
-				b = b.replace('\n','')
-				result_text += b
-				result_text += '\n'
-				pass
-
-
-			elif eatTime%4 == 1:
-				b = b.replace('\n','  ')
-				b = b.replace('  ',' ')
-				if cnt == d:
-					print '===아침==='
-					with codecs.open(str(month)+str(day)+"_학식"+".txt", "a+", encoding="utf-8") as f:
-						f.write(mor+"\r\n")
-
-					with codecs.open(str(month)+str(day)+"_효민2"+".txt", "a+", encoding="utf-8") as j:
-						j.write(mor+"\r\n")
-				result_text += b
-				result_text += '\n'
-
-			elif eatTime%4 == 2:
-				if cnt == d:
-					print '===점심==='
-					with codecs.open(str(month)+str(day)+"_학식"+".txt", "a+", encoding="utf-8") as f:
-						f.write(aft+"\r\n")
-
-					with codecs.open(str(month)+str(day)+"_효민2"+".txt", "a+", encoding="utf-8") as j:
-						j.write(aft+"\r\n")
-				b = b.replace('\n',' ')
-				result_text += b
-				result_text += '\n'
-
-			elif eatTime%4 == 3:
-				if cnt == d:
-					print '===저녁==='
-					with codecs.open(str(month)+str(day)+"_학식"+".txt", "a+", encoding="utf-8") as f:
-						f.write(eve+"\r\n")
-
-					with codecs.open(str(month)+str(day)+"_효민2"+".txt", "a+", encoding="utf-8") as j:
-						j.write(eve+"\r\n")
-				b = b.replace('\n',' ')
-				result_text += b
-				result_text += '\n\n\n'
-
-
-			if cnt == d:
-				print b
-				with codecs.open(str(month)+str(day)+"_학식"+".txt", "a+", encoding="utf-8") as f:
-					f.write(b+"\r\n\r\n")
-
-				with codecs.open(str(month)+str(day)+"_효민2"+".txt", "a+", encoding="utf-8") as j:
-					j.write(b+"\r\n")
-				print
-
-			eatTime+=1
-	with codecs.open(str(month)+str(day)+"_학식"+".txt", "a+", encoding="utf-8") as f:
+	with codecs.open(str(todayDate)+"_기숙사"+".txt", "w", encoding="utf-8") as f:
+		f.write(mor+"\r\n")
+		f.write(lun+"\r\n")
+		f.write(eve+"\r\n")
 		f.write("\r\n\r\n")
-	#print mor, aft, eve
 	print "\n\n\n"
-
-
-def hyumin3(month,day):
-	with codecs.open(str(month)+str(day)+"_학식"+".txt", "a+", encoding="utf-8") as f:
-		f.write(u"효민 여자 생활관\r\n")
-		f.write("===========================================\r\n")
-
-	with codecs.open(str(month)+str(day)+"_효민여자"+".txt", "w", encoding="utf-8") as j:
-		j.write(u"효민 여자 생활관\r\n")
-	print "\n+++++++++++++++++여자 효민 생활관++++++++++++++++++++"
-	###############여자 효민 생활관 파싱
-	url2 = 'http://dorm.deu.ac.kr/Program/ReadFood.aspx?BuildCd=2&menu=46'
-	html2 = get_source(url2,url2)
-	soup2 = BeautifulSoup(html2)
-	result2 = str(soup2)
-
-	#a = soup2.find_all('td',{'width':'140'})
-	a = soup2.find_all('tr')
-	#a = soup2.find_all('table',{'border':'1'})
-	#a = soup2.find_all('font',{'face':'Arial'})
-
-
-	cnt = 0
-	eatTime = 0
-	result_text = ""
-	tex = ""
-	d = datetime.date.today()
-	d= d.weekday()
-	d += 2
-	k=0
-	#한글 파싱 // \xa0 인식불가 제거
-	# b= 기숙사 식단 파싱
-
-	for i in a:
-		cnt += 1
-		i = i.find_all('td')
-		for b in i:
-			b = b.text
-			b = b.replace(u'\xa0', '')
-			b = b.replace('            ','')
-			b = b.replace('\r','')
-
-			if cnt ==1:
-				#print k, b[0:3]
-				#조식 중식 석식 문자열 체크
-				if k ==1 : mor = b[0:3]
-				if k ==2 : aft = b[0:3]
-				if k ==3 : eve = b[0:3]
-				k+=1
-
-			if eatTime%4 == 0:
-				b = b.replace('\n','')
-				result_text += b
-				result_text += '\n'
-				pass
-
-
-			elif eatTime%4 == 1:
-				b = b.replace('\n','  ')
-				b = b.replace('  ',' ')
-				if cnt == d:
-					print '===아침==='
-					with codecs.open(str(month)+str(day)+"_학식"+".txt", "a+", encoding="utf-8") as f:
-						f.write(mor+"\r\n")
-
-					with codecs.open(str(month)+str(day)+"_효민여자"+".txt", "a+", encoding="utf-8") as j:
-						j.write(mor+"\r\n")
-				result_text += b
-				result_text += '\n'
-
-			elif eatTime%4 == 2:
-				if cnt == d:
-					print '===점심==='
-					with codecs.open(str(month)+str(day)+"_학식"+".txt", "a+", encoding="utf-8") as f:
-						f.write(aft+"\r\n")
-
-					with codecs.open(str(month)+str(day)+"_효민여자"+".txt", "a+", encoding="utf-8") as j:
-						j.write(aft+"\r\n")
-				b = b.replace('\n',' ')
-				result_text += b
-				result_text += '\n'
-
-			elif eatTime%4 == 3:
-				if cnt == d:
-					print '===저녁==='
-					with codecs.open(str(month)+str(day)+"_학식"+".txt", "a+", encoding="utf-8") as f:
-						f.write(eve+"\r\n")
-
-					with codecs.open(str(month)+str(day)+"_효민여자"+".txt", "a+", encoding="utf-8") as j:
-						j.write(eve+"\r\n")
-				b = b.replace('\n',' ')
-				result_text += b
-				result_text += '\n\n\n'
-
-
-			if cnt == d:
-				print b
-				with codecs.open(str(month)+str(day)+"_학식"+".txt", "a+", encoding="utf-8") as f:
-					f.write(b+"\r\n\r\n")
-
-				with codecs.open(str(month)+str(day)+"_효민여자"+".txt", "a+", encoding="utf-8") as j:
-					j.write(b+"\r\n")
-				print
-
-			eatTime+=1
-	with codecs.open(str(month)+str(day)+"_학식"+".txt", "a+", encoding="utf-8") as f:
-		f.write("\r\n\r\n")
-	#print mor, aft, eve
-	print "\n\n\n"
-
-
 
 
 if __name__ == "__main__":
 	d = datetime.date.today()
-	######get_day
-	#dat = raw_input("월, 일을 입력하세요(예시 1201, 1205) : ")
-	#month = dat[0:-2]
-	#print month
-	#day = dat[2:]
-	#print day
 	month = str(d.month)
-	if d.day <10: day = '0'+str(d.day)
+	if d.day<10: day = '0'+str(d.day)
 	else:
 		day = str(d.day)
 
-#	print day, month
-
 	haksik(month,day)
 	hyumin1(month,day)
-	hyumin2(month,day)
-	hyumin3(month,day)
+
