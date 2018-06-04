@@ -1,0 +1,83 @@
+{
+    "manifest": {
+        "displayName": "Make Alarm",
+        "invocationName": "Make Alarm",
+        "category": "PRODUCTIVITY"
+    },
+        "locale": "ko",
+        "actions": [
+    {
+        "name": "com.acme.actions.make_alarm",
+            "availability": {
+                "deviceClasses": [
+                    {
+                        "assistantSdkDevice": {}
+                    }
+                ]
+            },
+            "intent": {
+                "name": "com.acme.intents.make_alarm",
+                "parameters": [
+                    {
+                        "name": "myhour",
+                        "type": "alarm"
+                    },
+
+                    {
+                        "name": "mymin",
+                        "type": "alarm"
+                    }
+                ],
+                "trigger": {
+                    "queryPatterns": [
+                        " $alarm:myhour 테스트 $alarm:mymin  부탁"
+                    ]
+                }
+            },
+            "fulfillment": {
+                "staticFulfillment": {
+                    "templatedResponse": {
+                        "items": [
+                            {
+                                "simpleResponse": {
+                                    "textToSpeech": "성공 $myhour.raw 시 $mymin.raw  에 알람을 등록하였습니다."
+                                }
+                            },
+                            {
+                                "deviceExecution": {
+                                    "command": "com.acme.commands.make_alarm",
+                                    "params": {
+                                    "HourKey": "$myhour",
+                                    "MinKey": "$mymin"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "types": [
+        {
+            "name": "$alarm",
+            "entities": [
+                {
+                    "key": "시간",
+                    "synonyms": [
+                        "피자",
+			"혼자"
+                    ]
+                },
+
+                {
+                    "key": "분",
+                    "synonyms": [
+                        "햄버거"
+                    ]
+                }
+            ]
+
+        }
+    ]
+}

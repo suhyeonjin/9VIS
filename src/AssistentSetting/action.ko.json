@@ -1,0 +1,72 @@
+{
+    "manifest": {
+        "displayName": "Food Selector",
+        "invocationName": "Food Selector",
+        "category": "PRODUCTIVITY"
+    },
+        "locale": "ko",
+        "actions": [
+    {
+        "name": "com.acme.actions.food_select",
+            "availability": {
+                "deviceClasses": [
+                    {
+                        "assistantSdkDevice": {}
+                    }
+                ]
+            },
+            "intent": {
+                "name": "com.acme.intents.food_select",
+                "parameters": [
+                    {
+                        "name": "myfood_ko",
+                        "type": "FoodType"
+                    }
+                ],
+                "trigger": {
+                    "queryPatterns": [
+                        "나는 $FoodType:myfood_ko 을 좋아해"
+                    ]
+                }
+            },
+            "fulfillment": {
+                "staticFulfillment": {
+                    "templatedResponse": {
+                        "items": [
+                            {
+                                "simpleResponse": {
+                                    "textToSpeech": "당신은 $myfood_ko.raw 을 좋아하는군요 진수현 미친놈 ."
+                                }
+                            },
+                            {
+                                "deviceExecution": {
+                                    "command": "com.acme.commands.food_select",
+                                    "params": {
+                                    "foodKey": "$myfood_ko"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "types": [
+        {
+            "name": "$FoodType",
+            "entities": [
+                {
+                    "key": "음식",
+                    "synonyms": [
+                        "고기",
+                        "피자",
+                        "치킨",
+                        "햄버거",
+                        "초밥"
+                    ]
+                }
+            ]
+        }
+    ]
+}
