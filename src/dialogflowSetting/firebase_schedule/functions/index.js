@@ -14,8 +14,7 @@ app.intent('pushreport', (conv,{ClassReport,datetime,ReportType}) => {
     var mydeadline = `${datetime.date_time}`.substring(0,10)
     
     userRef.child(`${ClassReport}`).set({
-        deadline : `${mydeadline}`,
-        classtype : `${ClassReport}`
+        deadline : `${mydeadline}`
     });
 
     conv.close(`날짜는  ${mydeadline}`+` 과목은 ${ClassReport}` +`${ReportType}  등록 완료하였습니다`);
