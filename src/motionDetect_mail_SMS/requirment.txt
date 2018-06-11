@@ -1,0 +1,10 @@
+[Need List]
+pip install twilio
+import cv2
+import numpy as np
+import motion
+import smtplib
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
+from smsSender import twilioSMS
+
