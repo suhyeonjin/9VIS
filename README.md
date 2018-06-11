@@ -12,19 +12,19 @@
 <br>
     - https://console.actions.google.com/
     <br>
-    ![actions](./img/assistant_makeproject.png)
+    ![actions](img/assistant_makeproject.png)
 <br>
 2. **Enable Google Assistant API**
 <br>
     - https://console.developers.google.com/apis/api/embeddedassistant.googleapis.com/overview
     <br>
-    ![api](./img/assistant_enableapi.png)
+    ![api](img/assistant_enableapi.png)
 <br>
 3. **Register Device (ex : raspberry pi3)**
 <br>
     - https://console.actions.google.com/
     <br>
-    ![register](./img/assistant_registerdevice.png)
+    ![register](img/assistant_registerdevice.png)
     <br>
     - **If you can't find 'device restration' section**
     <br>
@@ -87,12 +87,12 @@
   <br>
   - Make agent and select google project you created before
   <br>
-  ![agent](./img/dialogflow_agent.png)
+  ![agent](img/dialogflow_agent.png)
   <br>
 
 2. **Make Entities**
   <br>
-  ![entities](./img/entities_list.png)
+  ![entities](img/entities_list.png)
   <br>
 
 3. **Make Intent**
@@ -118,11 +118,11 @@
 <br>
     - **intent_list**
     <br>
-    ![intent](./img/intent_list.png)
+    ![intent](img/intent_list.png)
     <br>
     - **intent info**
     <br>
-    ![intent](./img/intent_info.png)
+    ![intent](img/intent_info.png)
     <br>
 
 ---
@@ -183,7 +183,7 @@
 <br>
 - **Or you can check you url in firebase functions tab**
 <br>
-![img](./img/firebase_url.png)
+![img](img/firebase_url.png)
 <br>
 <br>
 
@@ -206,9 +206,9 @@
 
   - **EX**
   <br>
-    ![database](./img/database_1.png)
+    ![database](img/database_1.png)
     <br>
-    ![database](./img/database_2.png)
+    ![database](img/database_2.png)
     <br>
 
 ---
@@ -220,24 +220,24 @@
 <br>
   - You can check response/request with json type in the right area of ​​the screen.
   <br>
-  ![test_1](./img/test_1.png)
+  ![test_1](img/test_1.png)
   <br>
-  ![test_2](./img/test_2.png)
+  ![test_2](img/test_2.png)
   <br>
 
 2. **Intergration**
 <br>
   - **Integration your Dialogflow to google assistant**
   <br>
-  ![integration](./img/integration_1.png)
+  ![integration](img/integration_1.png)
   <br>
   - **add your own intent**
   <br>
-  ![intergraion](./img/intergration_2.png)
+  ![intergraion](img/intergration_2.png)
   <br>
   - **test on your assistant simulation**
   <br>
-  ![intergration](./img/intergration_3.png)
+  ![intergration](img/intergration_3.png)
   <br>
 
 
@@ -250,15 +250,15 @@
 
 - **BEFORE**
 <br>
-![check](./img/check_1.png)
+![check](img/check_1.png)
 <br>
 - **Talk to Dialogflow**
 <br>
-![check](./img/check_2.png)
+![check](img/check_2.png)
 <br>
 - **AFTER**
 <br>
-![check](./img/check_3.png)
+![check](img/check_3.png)
 <br>
 
 ---
